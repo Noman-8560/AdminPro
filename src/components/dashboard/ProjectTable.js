@@ -1,77 +1,104 @@
-import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Form,
+  Table,
+  Button,
+  ModalBody,
+  Modal,
+  Label,
+  Input,
+  FormText,
+  FormGroup,
+} from "reactstrap";
 import user1 from "../../assets/images/users/user1.jpg";
 import user2 from "../../assets/images/users/user2.jpg";
 import user3 from "../../assets/images/users/user3.jpg";
 import user4 from "../../assets/images/users/user4.jpg";
 import user5 from "../../assets/images/users/user5.jpg";
+import React, { useState } from "react"; 
 
 const tableData = [
   {
-    avatar: user1,
-    name: "Hanna Gover",
+    logo: user1,
+    name: "J.",
     email: "hgover@gmail.com",
     project: "Flexy React",
     status: "pending",
-    weeks: "35",
-    budget: "95K",
+    description: "Outlet",
+    address: "Islamabad",
   },
   {
-    avatar: user2,
-    name: "Hanna Gover",
+    logo: user2,
+    name: "J.",
     email: "hgover@gmail.com",
     project: "Lading pro React",
     status: "done",
-    weeks: "35",
-    budget: "95K",
+    description: "Outlet",
+    address: "Abbottabad",
   },
   {
-    avatar: user3,
-    name: "Hanna Gover",
+    logo: user3,
+    name: "J.",
     email: "hgover@gmail.com",
     project: "Elite React",
     status: "holt",
-    weeks: "35",
-    budget: "95K",
+    description: "Outlet",
+    address: "Sargodha",
   },
   {
-    avatar: user4,
-    name: "Hanna Gover",
+    logo: user4,
+    name: "J.",
     email: "hgover@gmail.com",
     project: "Flexy React",
     status: "pending",
-    weeks: "35",
-    budget: "95K",
+    description: "Outlet",
+    address: "Lahore",
   },
   {
-    avatar: user5,
-    name: "Hanna Gover",
+    logo: user5,
+    name: "J.",
     email: "hgover@gmail.com",
     project: "Ample React",
     status: "done",
-    weeks: "35",
-    budget: "95K",
+    description: "Outlet",
+    address: "Karachi",
   },
 ];
 
 const ProjectTables = () => {
+  const [modal, setModal] = React.useState(false);
+
+  // Toggle for Modal
+  const toggle = () => setModal(!modal);
+
   return (
     <div>
       <Card>
         <CardBody>
-          <CardTitle tag="h5">Project Listing</CardTitle>
-          <CardSubtitle className="mb-2 text-muted" tag="h6">
-            Overview of the projects
-          </CardSubtitle>
+          {/* className="btn-primary text-end" */}
+          {/* <CardTitle tag="h5">Shop Listing</CardTitle> */}
+          {/* <Button >
+            Add Shop
+          </Button> */}
+          <button
+            className="btn btn-dark"
+            data-toggle="modal"
+            onClick={toggle}
+          >
+            Add Shop
+          </button>
 
           <Table className="no-wrap mt-3 align-middle" responsive borderless>
             <thead>
               <tr>
-                <th>Team Lead</th>
-                <th>Project</th>
+                <th>Logo</th>
+                <th>Name</th>
 
-                <th>Status</th>
-                <th>Weeks</th>
-                <th>Budget</th>
+                <th>description</th>
+                <th>Address</th>
               </tr>
             </thead>
             <tbody>
@@ -80,20 +107,20 @@ const ProjectTables = () => {
                   <td>
                     <div className="d-flex align-items-center p-2">
                       <img
-                        src={tdata.avatar}
+                        src={tdata.logo}
                         className="rounded-circle"
                         alt="avatar"
                         width="45"
                         height="45"
                       />
-                      <div className="ms-3">
+                      {/* <div className="ms-3">
                         <h6 className="mb-0">{tdata.name}</h6>
                         <span className="text-muted">{tdata.email}</span>
-                      </div>
+                      </div> */}
                     </div>
                   </td>
-                  <td>{tdata.project}</td>
-                  <td>
+                  <td>{tdata.name}</td>
+                  {/* <td>
                     {tdata.status === "pending" ? (
                       <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
                     ) : tdata.status === "holt" ? (
@@ -101,15 +128,51 @@ const ProjectTables = () => {
                     ) : (
                       <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
                     )}
-                  </td>
-                  <td>{tdata.weeks}</td>
-                  <td>{tdata.budget}</td>
+                  </td> */}
+                  <td>{tdata.description}</td>
+                  <td>{tdata.address}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </CardBody>
       </Card>
+      <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 1000 }}>
+        <ModalBody>
+        <Form >
+
+        <FormGroup>
+          <Label for="exampleFile">Logo</Label>
+          <Input type="file" name="file" id="exampleFile" />
+          <FormText color="muted">
+           Upload Logo of your shop
+          </FormText>
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="exampleText">Shop Name</Label>
+          <Input type="text" name="text" id="exampleText" placeholder="Enter Your Shop Name" />
+        </FormGroup>
+
+
+
+        <FormGroup>
+          <Label for="exampleText">description</Label>
+          <Input type="textarea" name="text" id="exampleText" />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="exampleText">Address</Label>
+          <Input type="textarea" name="text" id="exampleText" />
+        </FormGroup>
+
+
+  
+        <Button>Submit</Button>
+    </Form>
+
+        </ModalBody>
+      </Modal>
     </div>
   );
 };
