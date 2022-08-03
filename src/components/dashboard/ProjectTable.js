@@ -13,9 +13,11 @@ import {
 } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+// import { useAlert } from "react-alert";
 
 const ProjectTables = () => {
   const [modal, setModal] = React.useState(false);
+  // const alert = useAlert();
   const toggle = () => setModal(!modal);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,24 +25,25 @@ const ProjectTables = () => {
   const [phone_number, setPhone_Number] = useState("");
   const [images, setImages] = useState("");
   const [tableData, setTableData] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/shop/list/", {
+    Clinics();
+  }, []);
+
+  const Clinics = async () => {
+    try {
+      const recponse = await fetch("http://127.0.0.1:8000/shop/list/", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
         },
-      })
-      .then((result) => {
-        setTableData(result.data);
-        console.log(result.data);
-      })
-      .catch((err) => {
-        console.log("Error FIND");
-        // alert.error("Error in getting the list")
       });
-  }, []);
+      console.log("GETTING RESPONSE");
+      setTableData(await recponse.json());
+    } catch (error) {}
+  };
+
 
   const handleAPi = (e) => {
     e.preventDefault();
@@ -56,6 +59,8 @@ const ProjectTables = () => {
     console.log("TESTING");
     axios.post(url, formData).then((res) => {
       console.log(res);
+      toggle();
+      Clinics();
     });
   };
 
@@ -104,8 +109,14 @@ const ProjectTables = () => {
           </Table>
         </CardBody>
       </Card>
-      
-      <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 1000 }}>
+
+      <Modal
+        isOpen={modal}
+        show={showEdit}
+        block
+        toggle={toggle}
+        modalTransition={{ timeout: 1000 }}
+      >
         <ModalBody>
           <Form onSubmit={(e) => handleAPi(e)}>
             <FormGroup>
@@ -161,7 +172,7 @@ const ProjectTables = () => {
               />
             </FormGroup>
 
-            <Button>Submit</Button>
+            <Button type="submit">Submit</Button>
           </Form>
         </ModalBody>
       </Modal>
