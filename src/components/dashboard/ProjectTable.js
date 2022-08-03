@@ -87,7 +87,7 @@ const ProjectTables = () => {
                   <td>
                     <div className="d-flex align-items-center p-2">
                       <img
-                        src={tdata.images}
+                        src={`http://127.0.0.1:8000${tdata.images}`}
                         className="rounded-circle"
                         alt="Logo"
                         width="45"
@@ -104,6 +104,7 @@ const ProjectTables = () => {
           </Table>
         </CardBody>
       </Card>
+      
       <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 1000 }}>
         <ModalBody>
           <Form onSubmit={(e) => handleAPi(e)}>
