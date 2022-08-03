@@ -1,8 +1,6 @@
 import {
   Card,
   CardBody,
-  CardTitle,
-  CardSubtitle,
   Form,
   Table,
   Button,
@@ -13,66 +11,53 @@ import {
   FormText,
   FormGroup,
 } from "reactstrap";
-import user1 from "../../assets/images/users/user1.jpg";
-import user2 from "../../assets/images/users/user2.jpg";
-import user3 from "../../assets/images/users/user3.jpg";
-import user4 from "../../assets/images/users/user4.jpg";
-import user5 from "../../assets/images/users/user5.jpg";
-import React, { useState } from "react"; 
-
-const tableData = [
-  {
-    logo: user1,
-    name: "J.",
-    email: "hgover@gmail.com",
-    project: "Flexy React",
-    status: "pending",
-    description: "Outlet",
-    address: "Islamabad",
-  },
-  {
-    logo: user2,
-    name: "J.",
-    email: "hgover@gmail.com",
-    project: "Lading pro React",
-    status: "done",
-    description: "Outlet",
-    address: "Abbottabad",
-  },
-  {
-    logo: user3,
-    name: "J.",
-    email: "hgover@gmail.com",
-    project: "Elite React",
-    status: "holt",
-    description: "Outlet",
-    address: "Sargodha",
-  },
-  {
-    logo: user4,
-    name: "J.",
-    email: "hgover@gmail.com",
-    project: "Flexy React",
-    status: "pending",
-    description: "Outlet",
-    address: "Lahore",
-  },
-  {
-    logo: user5,
-    name: "J.",
-    email: "hgover@gmail.com",
-    project: "Ample React",
-    status: "done",
-    description: "Outlet",
-    address: "Karachi",
-  },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ProjectTables = () => {
   const [modal, setModal] = React.useState(false);
-
-  // Toggle for Modal
   const toggle = () => setModal(!modal);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone_number, setPhone_Number] = useState("");
+  const [images, setImages] = useState("");
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/shop/list/", {
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        setTableData(result.data);
+        console.log(result.data);
+      })
+      .catch((err) => {
+        console.log("Error FIND");
+        // alert.error("Error in getting the list")
+      });
+  }, []);
+
+  const handleAPi = (e) => {
+    e.preventDefault();
+    const url = "http://127.0.0.1:8000/shop/list/";
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("address", address);
+    formData.append("phone_number", phone_number);
+    formData.append("images", images);
+    console.log("TESTING");
+    console.log(images);
+    console.log("TESTING");
+    axios.post(url, formData).then((res) => {
+      console.log(res);
+    });
+  };
 
   return (
     <div>
@@ -83,11 +68,7 @@ const ProjectTables = () => {
           {/* <Button >
             Add Shop
           </Button> */}
-          <button
-            className="btn btn-dark"
-            data-toggle="modal"
-            onClick={toggle}
-          >
+          <button className="btn btn-dark" data-toggle="modal" onClick={toggle}>
             Add Shop
           </button>
 
@@ -96,7 +77,6 @@ const ProjectTables = () => {
               <tr>
                 <th>Logo</th>
                 <th>Name</th>
-
                 <th>description</th>
                 <th>Address</th>
               </tr>
@@ -107,28 +87,15 @@ const ProjectTables = () => {
                   <td>
                     <div className="d-flex align-items-center p-2">
                       <img
-                        src={tdata.logo}
+                        src={tdata.images}
                         className="rounded-circle"
-                        alt="avatar"
+                        alt="Logo"
                         width="45"
                         height="45"
                       />
-                      {/* <div className="ms-3">
-                        <h6 className="mb-0">{tdata.name}</h6>
-                        <span className="text-muted">{tdata.email}</span>
-                      </div> */}
                     </div>
                   </td>
                   <td>{tdata.name}</td>
-                  {/* <td>
-                    {tdata.status === "pending" ? (
-                      <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
-                    ) : tdata.status === "holt" ? (
-                      <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
-                    ) : (
-                      <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
-                    )}
-                  </td> */}
                   <td>{tdata.description}</td>
                   <td>{tdata.address}</td>
                 </tr>
@@ -139,38 +106,62 @@ const ProjectTables = () => {
       </Card>
       <Modal isOpen={modal} toggle={toggle} modalTransition={{ timeout: 1000 }}>
         <ModalBody>
-        <Form >
+          <Form onSubmit={(e) => handleAPi(e)}>
+            <FormGroup>
+              <Label for="exampleFile">Logo</Label>
+              <Input
+                type="file"
+                name="images"
+                onChange={(e) => setImages(e.target.files[0])}
+              />
+              <FormText color="muted">Upload Logo of your shop</FormText>
+            </FormGroup>
 
-        <FormGroup>
-          <Label for="exampleFile">Logo</Label>
-          <Input type="file" name="file" id="exampleFile" />
-          <FormText color="muted">
-           Upload Logo of your shop
-          </FormText>
-        </FormGroup>
+            <FormGroup>
+              <Label for="exampleText">Shop Name</Label>
+              <Input
+                type="text"
+                name="name"
+                value={name}
+                id="exampleText"
+                placeholder="Enter Your Shop Name"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormGroup>
 
-        <FormGroup>
-          <Label for="exampleText">Shop Name</Label>
-          <Input type="text" name="text" id="exampleText" placeholder="Enter Your Shop Name" />
-        </FormGroup>
+            <FormGroup>
+              <Label for="exampleText">Contact No</Label>
+              <Input
+                type="text"
+                name="phone_number"
+                value={phone_number}
+                placeholder="Enter Your Contact Number"
+                onChange={(e) => setPhone_Number(e.target.value)}
+              />
+            </FormGroup>
 
+            <FormGroup>
+              <Label for="exampleText">Description</Label>
+              <Input
+                type="textarea"
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormGroup>
 
+            <FormGroup>
+              <Label for="exampleText">Address</Label>
+              <Input
+                type="textarea"
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </FormGroup>
 
-        <FormGroup>
-          <Label for="exampleText">description</Label>
-          <Input type="textarea" name="text" id="exampleText" />
-        </FormGroup>
-
-        <FormGroup>
-          <Label for="exampleText">Address</Label>
-          <Input type="textarea" name="text" id="exampleText" />
-        </FormGroup>
-
-
-  
-        <Button>Submit</Button>
-    </Form>
-
+            <Button>Submit</Button>
+          </Form>
         </ModalBody>
       </Modal>
     </div>
