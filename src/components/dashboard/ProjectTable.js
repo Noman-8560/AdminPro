@@ -44,7 +44,6 @@ const ProjectTables = () => {
     } catch (error) {}
   };
 
-
   const handleAPi = (e) => {
     e.preventDefault();
     const url = "http://127.0.0.1:8000/shop/list/";
@@ -150,6 +149,19 @@ const ProjectTables = () => {
                 placeholder="Enter Your Contact Number"
                 onChange={(e) => setPhone_Number(e.target.value)}
               />
+            </FormGroup>
+
+            <Label for="exampleText">Select Types Dashboard's</Label>
+            <FormGroup check>
+              <Input type="checkbox" /> <Label check>invantory</Label>
+            </FormGroup>
+
+            <FormGroup check>
+              <Input type="checkbox" /> <Label check>Point of Sale(POS)</Label>
+            </FormGroup>
+
+            <FormGroup check>
+              <Input type="checkbox" /> <Label check>Invoice</Label>
             </FormGroup>
 
             <FormGroup>
