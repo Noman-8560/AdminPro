@@ -24,8 +24,18 @@ const ProjectTables = () => {
   const [address, setAddress] = useState("");
   const [phone_number, setPhone_Number] = useState("");
   const [images, setImages] = useState("");
+  const [services, setServices] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
+
+  const getservices = (e) => {
+    const { value, checked} = e.target
+    if(checked){
+      setServices([...services, value])
+    } else{
+      setServices(services.filter((e) => e !== value))
+    }
+  };
 
   useEffect(() => {
     Clinics();
@@ -53,8 +63,9 @@ const ProjectTables = () => {
     formData.append("address", address);
     formData.append("phone_number", phone_number);
     formData.append("images", images);
+    formData.append("services", services);
     console.log("TESTING");
-    console.log(images);
+    console.log(services);
     console.log("TESTING");
     axios.post(url, formData).then((res) => {
       console.log(res);
@@ -67,11 +78,6 @@ const ProjectTables = () => {
     <div>
       <Card>
         <CardBody>
-          {/* className="btn-primary text-end" */}
-          {/* <CardTitle tag="h5">Shop Listing</CardTitle> */}
-          {/* <Button >
-            Add Shop
-          </Button> */}
           <button className="btn btn-dark" data-toggle="modal" onClick={toggle}>
             Add Shop
           </button>
@@ -81,8 +87,10 @@ const ProjectTables = () => {
               <tr>
                 <th>Logo</th>
                 <th>Name</th>
-                <th>description</th>
+                <th>Description</th>
+                <th>Services</th>
                 <th>Address</th>
+
               </tr>
             </thead>
             <tbody>
@@ -101,7 +109,9 @@ const ProjectTables = () => {
                   </td>
                   <td>{tdata.name}</td>
                   <td>{tdata.description}</td>
+                  <td>{tdata.services}</td>
                   <td>{tdata.address}</td>
+
                 </tr>
               ))}
             </tbody>
@@ -151,17 +161,32 @@ const ProjectTables = () => {
               />
             </FormGroup>
 
-            <Label for="exampleText">Select Types Dashboard's</Label>
+            <Label for="exampleText">Select Types Service's</Label>
             <FormGroup check>
-              <Input type="checkbox" /> <Label check>invantory</Label>
+              <Input
+                type="checkbox"
+                value="Inventory"
+                onChange={(e) => getservices(e)}
+              />{" "}
+              <Label check>Inventory</Label>
             </FormGroup>
 
             <FormGroup check>
-              <Input type="checkbox" /> <Label check>Point of Sale(POS)</Label>
+              <Input
+                type="checkbox"
+                value="POS"
+                onChange={(e) => getservices(e)}
+              />{" "}
+              <Label check>Point of Sale(POS)</Label>
             </FormGroup>
 
             <FormGroup check>
-              <Input type="checkbox" /> <Label check>Invoice</Label>
+              <Input
+                type="checkbox"
+                value="Invoice"
+                onChange={(e) => getservices(e)}
+              />{" "}
+              <Label check>Invoice</Label>
             </FormGroup>
 
             <FormGroup>
