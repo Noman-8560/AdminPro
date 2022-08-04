@@ -11,7 +11,7 @@ import {
   FormText,
   FormGroup,
   Badge,
-  ModalHeader,
+  // ModalHeader,
   ModalFooter,
 } from "reactstrap";
 import React, { useState, useEffect } from "react";
@@ -144,7 +144,17 @@ const ProjectTables = () => {
                   <td>{tdata.services}</td>
                   <td>{tdata.address}</td>
                   <td>
-                    <Badge
+
+                  <Badge
+                      color="primary"
+                      type="submit"
+                      onClick={toggles}
+                      data-toggle="modals"
+                    >
+                      Edit
+                    </Badge>
+
+                    {/* <Badge
                       color="danger"
                       type="submit"
                       // onClick={toggles}
@@ -152,7 +162,7 @@ const ProjectTables = () => {
                       data-toggle="modals"
                     >
                       Delete
-                    </Badge>
+                    </Badge> */}
                   </td>
                 </tr>
               ))}
