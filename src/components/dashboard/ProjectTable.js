@@ -10,6 +10,9 @@ import {
   Input,
   FormText,
   FormGroup,
+  Badge,
+  ModalHeader,
+  ModalFooter,
 } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -17,8 +20,10 @@ import axios from "axios";
 
 const ProjectTables = () => {
   const [modal, setModal] = React.useState(false);
+  const [modals, setModals] = React.useState(false);
   // const alert = useAlert();
   const toggle = () => setModal(!modal);
+  const toggles = () => setModals(!modals);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
@@ -27,18 +32,21 @@ const ProjectTables = () => {
   const [services, setServices] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
 
   const getservices = (e) => {
-    const { value, checked} = e.target
-    if(checked){
-      setServices([...services, value])
-    } else{
-      setServices(services.filter((e) => e !== value))
+    const { value, checked } = e.target;
+    if (checked) {
+      setServices([...services, value]);
+    } else {
+      setServices(services.filter((e) => e !== value));
     }
   };
 
   useEffect(() => {
     Clinics();
+    handleClose();
   }, []);
 
   const Clinics = async () => {
@@ -74,6 +82,30 @@ const ProjectTables = () => {
     });
   };
 
+  function deleteApp(pk) {
+    console.log("ID:::", pk);
+    // const body = JSON.stringify({ Id: id });
+    fetch(`http://127.0.0.1:8000/shop/${pk}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => {
+      console.log(res);
+      Clinics();
+      // const code = res.status
+      // return [code,res.json()]
+    });
+    // .then((result) => {
+    //   console.log(result);
+    //   if(result[0]>=200&& result[0] <=299){
+    //     alert.success('Clinic Deleted Successfully...')
+    //     // getClinics()
+    //     // handleClose()
+    //   }
+    //   console.log(result);
+    // });
+    // router.replace(router.asPath);
+  }
+
   return (
     <div>
       <Card>
@@ -90,7 +122,7 @@ const ProjectTables = () => {
                 <th>Description</th>
                 <th>Services</th>
                 <th>Address</th>
-
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -111,7 +143,17 @@ const ProjectTables = () => {
                   <td>{tdata.description}</td>
                   <td>{tdata.services}</td>
                   <td>{tdata.address}</td>
-
+                  <td>
+                    <Badge
+                      color="danger"
+                      type="submit"
+                      // onClick={toggles}
+                      onClick={() => deleteApp(tdata.id)}
+                      data-toggle="modals"
+                    >
+                      Delete
+                    </Badge>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -212,6 +254,24 @@ const ProjectTables = () => {
             <Button type="submit">Submit</Button>
           </Form>
         </ModalBody>
+      </Modal>
+
+      <Modal
+        isOpen={modals}
+        show={show}
+        block
+        toggle={toggles}
+        modalTransition={{ timeout: 1000 }}
+      >
+        <ModalBody>Are you Sure!!!</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleClose}>
+            Cancel
+          </Button>{" "}
+          <Button color="danger" onClick={() => deleteApp()}>
+            Delete
+          </Button>
+        </ModalFooter>
       </Modal>
     </div>
   );
