@@ -21,9 +21,12 @@ import axios from "axios";
 const ProjectTables = () => {
   const [modal, setModal] = React.useState(false);
   const [modals, setModals] = React.useState(false);
+  const [modalss, setModalss] = React.useState(false);
+
   // const alert = useAlert();
   const toggle = () => setModal(!modal);
   const toggles = () => setModals(!modals);
+  const toggless = () => setModalss(!modalss);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
@@ -34,6 +37,8 @@ const ProjectTables = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
+  const [singleMember, setSingleMember] = useState({})
+
 
   const getservices = (e) => {
     const { value, checked } = e.target;
@@ -85,6 +90,7 @@ const ProjectTables = () => {
   function deleteApp(pk) {
     console.log("ID:::", pk);
     // const body = JSON.stringify({ Id: id });
+    setSingleMember({})
     fetch(`http://127.0.0.1:8000/shop/${pk}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -144,25 +150,23 @@ const ProjectTables = () => {
                   <td>{tdata.services}</td>
                   <td>{tdata.address}</td>
                   <td>
-
-                  <Badge
+                    <Badge
                       color="primary"
                       type="submit"
-                      onClick={toggles}
-                      data-toggle="modals"
+                      onClick={toggless}
+                      data-toggle="modalss"
                     >
                       Edit
-                    </Badge>
-
-                    {/* <Badge
+                    </Badge>{" " }
+                    <Badge
                       color="danger"
                       type="submit"
-                      // onClick={toggles}
-                      onClick={() => deleteApp(tdata.id)}
+                      onClick={toggles}
+                      // onClick={() => deleteApp(tdata.id)}
                       data-toggle="modals"
                     >
                       Delete
-                    </Badge> */}
+                    </Badge>
                   </td>
                 </tr>
               ))}
@@ -278,7 +282,25 @@ const ProjectTables = () => {
           <Button color="primary" onClick={handleClose}>
             Cancel
           </Button>{" "}
-          <Button color="danger" onClick={() => deleteApp()}>
+          <Button color="danger" onClick={() => deleteApp(singleMember.pk)}>
+            Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal
+        isOpen={modalss}
+        show={show}
+        block
+        toggle={toggless}
+        modalTransition={{ timeout: 1000 }}
+      >
+        <ModalBody>Are you Sure!!!</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleClose}>
+            Cancel
+          </Button>{" "}
+          <Button color="warning" onClick={() => deleteApp()}>
             Delete
           </Button>
         </ModalFooter>
@@ -286,6 +308,5 @@ const ProjectTables = () => {
     </div>
   );
 };
-
 
 export default ProjectTables;
